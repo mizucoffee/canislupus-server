@@ -89,7 +89,7 @@ app.post('/signup', async (req, res) => {
 })
 
 app.post("/mypage", async (req, res) => {
-  if (!checkProperty(req.body, ["id", "qr", "verify"])) return res.redirect('/login')
+  if (!checkProperty(req.body, ["id", "qr", "verify"])) return res.redirect('/login#failed')
 
   const player = await Player.findOne({ id: req.body.id })
   if (player == null) return res.redirect("/login#failed")
