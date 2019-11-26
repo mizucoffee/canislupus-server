@@ -135,8 +135,8 @@ app.get('/api/player/qr', async (req, res) => {
 })
 
 app.post('/api/player/auth', async (req, res) => {
-  if (!checkProperty(req.body, ["id", "verify"])) return invalidBody(res)
-  const player = (await Player.findOne({ id: req.body.id, verify: req.body.verify }))
+  if (!checkProperty(req.body, ["qr", "verify"])) return invalidBody(res)
+  const player = (await Player.findOne({ qr: req.body.qr, verify: req.body.verify }))
   if (player == null) return response(res, null, { code: 400, msg: "Failure" })
 
   response(res, {
