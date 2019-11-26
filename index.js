@@ -24,6 +24,8 @@ app.use(sessionMiddleware)
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }))
 app.use(bodyParser.json({ limit: '100mb' }))
 app.use(express.static('./public'))
+app.set('view engine', 'pug')
+app.locals.basedir = './views'
 
 const server = http.listen(process.env.PORT || 3000, () => console.log("Node.js is listening to PORT:" + server.address().port))
 
@@ -43,6 +45,59 @@ function response(res, data, error) {
   if (error) return res.status(error.code).json({ ok: false, error })
   res.json({ ok: true, data })
 }
+
+app.get('/', (req, res) => {
+  res.redirect('/login')
+})
+
+app.get('/login', (req, res) => {
+  res.render('login')
+})
+
+app.post('/login-pin', async (req, res) => {
+  if (req.body == null) return res.redirect('/login')
+  if (!checkProperty(req.body, ["id"])) return res.redirect('/login')
+
+  const player = await Player.findOne({ id: req.body.id })
+  if (player == null) return res.render('login-pin', { qr: "", id: "" })
+  res.render('login-pin', { qr: player.qr, id: player.id })
+})
+
+app.get('/signup', (req, res) => {
+  res.render('signup', { qr: uniqid() })
+})
+
+app.post('/signup', async (req, res) => {
+  if (req.body == null) return res.redirect('/signup#invalid')
+  if (!checkProperty(req.body, ["id", "name", "qr", "verify"])) return res.redirect('/signup#invalid')
+
+  if ((await Player.find({ id: req.body.id })).length > 0) return res.redirect('/signup#duplicate')
+
+  const player = new Player({
+    name: req.body.name,
+    id: req.body.id,
+    qr: req.body.qr,
+    verify: req.body.verify,
+    win: 0,
+    lose: 0,
+    draw: 0
+  })
+
+  await player.save()
+
+  res.redirect('/login#done')
+})
+
+app.post("/mypage", async (req, res) => {
+  if (!checkProperty(req.body, ["id", "qr", "verify"])) return res.redirect('/login')
+
+  const player = await Player.findOne({ id: req.body.id })
+  if (player == null) return res.redirect("/login#failed")
+  if (player.verify != req.body.verify) return res.redirect("/login#failed")
+
+  res.render('mypage', { qr: await QRCode.toDataURL(player.qr), name: player.name })
+})
+
 
 app.get('/api/', (req, res) => response(res, { version: 1 }))
 
@@ -81,7 +136,7 @@ app.get('/api/player/qr', async (req, res) => {
 
 app.post('/api/player/auth', async (req, res) => {
   if (!checkProperty(req.body, ["id", "verify"])) return invalidBody(res)
-  const player = (await Player.findOne({ id: req.body.id, verify: req.body.verify }))[0]
+  const player = (await Player.findOne({ id: req.body.id, verify: req.body.verify }))
   if (player == null) return response(res, null, { code: 400, msg: "Failure" })
 
   response(res, {

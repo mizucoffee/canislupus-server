@@ -1,0 +1,21 @@
+doctype html
+html(lang="ja")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title CanisLupus
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous")
+    script(src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js")
+    script(src="https://www.gstatic.com/firebasejs/7.5.0/firebase-firestore.js")
+  body
+    .container
+      header(style="margin: 32px 0;")
+        h1 canislupus
+        h2(style="color: #999999;") Mypage
+      #main
+        img(src=`${qr}`, alt="", style="display: block; margin: 0 auto; max-width: 400px; width: 100%;")
+        div(style="width: 100%; text-align: center; font-size: 32px;")= name + "さん"
+        br
+        br
+        a(href="/login") Logout

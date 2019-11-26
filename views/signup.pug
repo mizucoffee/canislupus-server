@@ -1,0 +1,60 @@
+doctype html
+html(lang="ja")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title CanisLupus
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous")
+    script(src="https://www.gstatic.com/firebasejs/7.5.0/firebase-app.js")
+    script(src="https://www.gstatic.com/firebasejs/7.5.0/firebase-firestore.js")
+    script.
+      window.onload = () => {
+        const pw = document.getElementById("pw")
+        const qr = document.getElementById("qr")
+        const verify = document.getElementById("verify")
+
+        pw.onkeyup = () => verify.value = crypt(qr.value, pw.value)
+      }
+
+      cipher = "cpm8sk10hxgwy95uen7ofr4lvbj32tadq6zi";
+      plain = "0123456789abcdefghijklmnopqrstuvwxyz";
+
+      function crypt(text, number) {
+        num = number.split("").map(e => Number(e))
+        crypted = ""
+
+        for (let k = 0; k < number+1; k++) {
+          for (let i = 0; i < text.length; i++) {
+            let index = (plain.indexOf(text[i]) + i) % plain.length
+            crypted += cipher[index]
+          }
+          text = crypted
+          crypted = ""
+        }
+        return text
+      }
+
+  body
+    .container
+      header(style="margin: 32px 0;")
+        h1 canislupus
+        h2(style="color: #999999;") New account
+      #main
+        div#failed.alert.alert-danger(role="alert") 既に利用されているIDです。別のIDを入力してください。
+        form(action="/signup" method="POST")
+          .form-group
+            label(for="nickname") ニックネーム
+            input#nickname.form-control(type="text" name="name" placeholder="Nickname" required)
+          .form-group
+            label(for="id") ID
+            input#id.form-control(type="text" name="id" placeholder="Enter ID" required)
+          .form-group
+            label(for="pw") パスコード
+            input#pw.form-control(type="text" placeholder="数字4桁" pattern="^[0-9]{4}$" maxlength="4" required)
+          input#qr(type="hidden" name="qr" value=`${qr}`)
+          input#verify(type="hidden" name="verify")
+          input#submit.btn.btn-primary(type="submit" value="Login")
+        br
+        br
+        a(href="/") ← Back to Login
