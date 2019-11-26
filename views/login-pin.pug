@@ -21,18 +21,18 @@ html(lang="ja")
       plain = "0123456789abcdefghijklmnopqrstuvwxyz";
 
       function crypt(text, number) {
-        num = number.split("").map(e => Number(e))
-        crypted = ""
+        number = Number(number)
+        crypted = "";
 
         for (let k = 0; k < number+1; k++) {
           for (let i = 0; i < text.length; i++) {
-            let index = (plain.indexOf(text[i]) + i) % plain.length
-            crypted += cipher[index]
+            let index = (plain.indexOf(text[i]) + i) % plain.length;
+            crypted += cipher[index];
           }
-          text = crypted
-          crypted = ""
+          text = crypted;
+          crypted = "";
         }
-        return text
+        return text;
       }
   body
     .container
