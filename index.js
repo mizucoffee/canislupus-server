@@ -140,14 +140,12 @@ app.post('/api/player/auth', async (req, res) => {
   if (player == null) return response(res, null, { code: 400, msg: "Failure" })
 
   response(res, {
-    player: {
-      _id: player._id.toString(),
-      id: player.id,
-      name: player.name,
-      win: player.win,
-      lose: player.lose,
-      draw: player.draw
-    }
+    _id: player._id.toString(),
+    id: player.id,
+    name: player.name,
+    win: player.win,
+    lose: player.lose,
+    draw: player.draw
   })
 })
 
@@ -170,7 +168,5 @@ app.post('/api/game/set', async (req, res) => {
 
   await game.save()
 
-  response(res, {
-    game
-  })
+  response(res, game)
 })
