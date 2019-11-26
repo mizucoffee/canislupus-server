@@ -1,0 +1,5 @@
+{
+  "server": {
+    "mongo": "localhost:27017"
+  }
+}

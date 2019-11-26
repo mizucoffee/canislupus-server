@@ -1,0 +1,20 @@
+{
+  "name": "canislupus-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/mizucoffee/canislupus-server.git",
+  "author": "Ritsuki Goto <develop@mizucoffee.net>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "config": "^3.2.4",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "http": "^0.0.0",
+    "mongoose": "^5.7.12",
+    "qrcode": "^1.4.4",
+    "socket.io": "^2.3.0",
+    "uniqid": "^5.1.0"
+  }
+}
