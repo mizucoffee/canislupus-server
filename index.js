@@ -157,6 +157,15 @@ app.post('/api/player/auth', async (req, res) => {
   })
 })
 
+app.post('/api/player/auth/pin', async (req, res) => {
+  if (req.body == null) return res.redirect('/login')
+  if (!checkProperty(req.body, ["id"])) return res.redirect('/login')
+
+  const player = await Player.findOne({ id: req.body.id })
+  if (player == null) return response(res, { qr: "" })
+  response(res, { qr: player.qr })
+})
+
 app.post('/api/game/init', async (req, res) => {
   const game = await new Game().save()
   response(res, { game: { id: game._id.toString() } })
