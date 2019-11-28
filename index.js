@@ -178,7 +178,7 @@ app.post('/api/game/set', async (req, res) => {
 
   if (isFinite(Number(req.body.phase))) game.phase = Number(req.body.phase)
   if (req.body.players) game.players = req.body.players
-  if (req.body.cards) game.players = req.body.cards
+  if (req.body.cards) game.cards = req.body.cards
   if (req.body.status) game.status = req.body.status
   if (isFinite(Number(req.body.startTime))) game.startTime = Number(req.body.startTime)
   if (req.body.abilityMessage) game.abilityMessage = req.body.abilityMessage
