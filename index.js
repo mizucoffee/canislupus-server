@@ -107,7 +107,7 @@ app.post('/api/player', async (req, res) => {
 
   if ((await Player.find({ id: req.body.id })).length) return response(res, null, { code: 400, msg: "Duplicate ID" })
 
-  await new Player({
+  const player = new Player({
     name: req.body.name,
     id: req.body.id,
     qr: req.body.qr,
@@ -115,9 +115,17 @@ app.post('/api/player', async (req, res) => {
     win: 0,
     lose: 0,
     draw: 0
-  }).save()
+  })
+  await player.save()
 
-  response(res, { qr: uniqid() })
+  response(res, {
+    _id: player._id.toString(),
+    id: player.id,
+    name: player.name,
+    win: player.win,
+    lose: player.lose,
+    draw: player.draw
+  })
 })
 
 app.get('/api/player/uniq', async (req, res) => {
