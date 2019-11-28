@@ -168,7 +168,7 @@ app.post('/api/player/auth/pin', async (req, res) => {
 
 app.post('/api/game/init', async (req, res) => {
   const game = await new Game().save()
-  response(res, { game: { id: game._id.toString() } })
+  response(res, { id: game._id.toString() })
 })
 
 app.post('/api/game/set', async (req, res) => {
