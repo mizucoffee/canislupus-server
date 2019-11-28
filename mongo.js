@@ -17,7 +17,7 @@ const Player = db.model('Player', {
 
 const Game = db.model('Game', {
   phase: Number,
-  data: [Mixed]
+  data: String
 })
 
 module.exports.db = db
