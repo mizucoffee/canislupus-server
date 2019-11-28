@@ -172,17 +172,12 @@ app.post('/api/game/init', async (req, res) => {
 })
 
 app.post('/api/game/set', async (req, res) => {
-  if (!checkProperty(req.body, ["id"])) return invalidBody(res)
+  if (!checkProperty(req.body, ["id", "phase", "data"])) return invalidBody(res)
   const game = await Game.findById(req.body.id)
   if (game == null) return response(res, null, { code: 404, msg: "Not found" })
 
   if (isFinite(Number(req.body.phase))) game.phase = Number(req.body.phase)
-  if (req.body.players) game.players = req.body.players
-  if (req.body.cards) game.cards = req.body.cards
-  if (req.body.status) game.status = req.body.status
-  if (isFinite(Number(req.body.startTime))) game.startTime = Number(req.body.startTime)
-  if (req.body.abilityMessage) game.abilityMessage = req.body.abilityMessage
-
+  game.data = req.body.data
   await game.save()
 
   response(res, game)
