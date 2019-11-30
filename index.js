@@ -21,7 +21,8 @@ io.use((socket, next) => sessionMiddleware(socket.request, socket.request.res, n
 io.sockets.on("connection", function (socket) {
   socket.on("join", async function (id) {
     socket.join(id)
-    io.to(socket.id).emit('game', await Game.findById(id))
+    const game = await Game.findById(id)
+    io.to(socket.id).emit("game", game.phase, game.data)
   })
 })
 
@@ -186,7 +187,7 @@ app.post('/api/game/set', async (req, res) => {
   if (isFinite(Number(req.body.phase))) game.phase = Number(req.body.phase)
   game.data = JSON.parse(req.body.data)
   await game.save()
-  io.sockets.in(req.body.id).emit("game", game)
+  io.sockets.in(req.body.id).emit("game", game.phase, game.data)
 
   response(res, game)
 })
