@@ -22,7 +22,7 @@ io.sockets.on("connection", function (socket) {
   socket.on("join", async function (id) {
     socket.join(id)
     const game = await Game.findById(id)
-    io.to(socket.id).emit("game", game.phase, game.data)
+    io.to(socket.id).emit("game", game.phase, JSON.stringify(game.data))
   })
 })
 
@@ -187,7 +187,7 @@ app.post('/api/game/set', async (req, res) => {
   if (isFinite(Number(req.body.phase))) game.phase = Number(req.body.phase)
   game.data = JSON.parse(req.body.data)
   await game.save()
-  io.sockets.in(req.body.id).emit("game", game.phase, game.data)
+  io.sockets.in(req.body.id).emit("game", game.phase, JSON.stringify(game.data))
 
   response(res, game)
 })
