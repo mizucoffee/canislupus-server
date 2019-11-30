@@ -18,6 +18,13 @@ const sessionMiddleware = session({
 
 io.use((socket, next) => sessionMiddleware(socket.request, socket.request.res, next))
 
+io.sockets.on("connection", function (socket) {
+  socket.on("join", async function (message) {
+    socket.join(message)
+    io.to(socket.id).emit('game', await Game.findById(req.body.id))
+  })
+})
+
 app.disable('x-powered-by')
 app.set('trust proxy', 1)
 app.use(sessionMiddleware)
@@ -179,6 +186,7 @@ app.post('/api/game/set', async (req, res) => {
   if (isFinite(Number(req.body.phase))) game.phase = Number(req.body.phase)
   game.data = req.body.data
   await game.save()
+  io.sockets.in(req.body.id).emit("game", game)
 
   response(res, game)
 })
