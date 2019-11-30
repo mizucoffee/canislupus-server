@@ -19,9 +19,9 @@ const sessionMiddleware = session({
 io.use((socket, next) => sessionMiddleware(socket.request, socket.request.res, next))
 
 io.sockets.on("connection", function (socket) {
-  socket.on("join", async function (message) {
-    socket.join(message)
-    io.to(socket.id).emit('game', await Game.findById(req.body.id))
+  socket.on("join", async function (id) {
+    socket.join(id)
+    io.to(socket.id).emit('game', await Game.findById(id))
   })
 })
 
@@ -184,7 +184,7 @@ app.post('/api/game/set', async (req, res) => {
   if (game == null) return response(res, null, { code: 404, msg: "Not found" })
 
   if (isFinite(Number(req.body.phase))) game.phase = Number(req.body.phase)
-  game.data = req.body.data
+  game.data = JSON.parse(req.body.data)
   await game.save()
   io.sockets.in(req.body.id).emit("game", game)
 
