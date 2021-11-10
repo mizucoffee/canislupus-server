@@ -1,9 +1,8 @@
 const db = require('mongoose'),
-  config = require('config'),
   Schema = db.Schema,
   Mixed = Schema.Types.Mixed
 
-db.connect(`mongodb://${config.get('server.mongo')}/canislupus`, { useNewUrlParser: true, useUnifiedTopology: true })
+db.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const Player = db.model('Player', {
   id: String,
